@@ -33,16 +33,21 @@ const validateChatInput = (req, res, next) => {
 
 // Security: Authentication middleware for API
 const requireApiAuth = (req, res, next) => {
+  console.log('🔍 API Auth check - Session user:', req.session.user);
   if (!req.session.user) {
+    console.log('❌ API Auth failed - No session user');
     return res.status(401).json({ error: 'Authentication required' });
   }
+  console.log('✅ API Auth successful for user:', req.session.user);
   next();
 };
 
 // Secure chat endpoint
 router.post('/chat', requireApiAuth, apiLimiter, validateChatInput, async (req, res) => {
   try {
+    console.log('🔍 Chat API called by user:', req.session.user);
     const { message } = req.body;
+    console.log('🔍 Message received:', message);
     const API_KEY = process.env.GEMINI_API_KEY;
     
     if (!API_KEY) {
@@ -95,6 +100,7 @@ router.post('/chat', requireApiAuth, apiLimiter, validateChatInput, async (req, 
       .substring(0, 2000); // Limit response length
 
     console.log(`✅ Chat request processed for user: ${req.session.user}`);
+    console.log('🔍 Sending response:', aiResponse.substring(0, 100) + '...');
     
     res.json({ 
       response: aiResponse,

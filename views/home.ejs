@@ -619,21 +619,27 @@
 
         // Send a POST request to the secure API endpoint
         try {
+          console.log('🔍 Sending chat request:', userMessage);
           const response = await fetch(API_URL, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
+            credentials: 'same-origin', // Include session cookies
             body: JSON.stringify({
               message: userMessage
             }),
           });
 
+          console.log('🔍 Response status:', response.status);
           const data = await response.json();
+          console.log('🔍 Response data:', data);
+          
           if (!response.ok) throw new Error(data.error || 'Request failed');
 
           // Get the API response text
           const apiResponse = data.response;
           showTypingEffect(apiResponse, textElement, incomingMessageDiv);
         } catch (error) {
+          console.error('❌ Chat API error:', error);
           isResponseGenerating = false;
           textElement.innerText = error.message || 'Something went wrong. Please try again.';
           textElement.classList.add("error");
