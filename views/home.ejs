@@ -564,9 +564,8 @@
       let userMessage = null;
       let isResponseGenerating = false;
 
-      //API configuration
-      const API_KEY = `AIzaSyBK2VDH3TRBQFDTVO8gWKaznKjvAq3-Cyg`;
-      const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`;
+      //API configuration - Now using secure backend endpoint
+      const API_URL = `/api/chat`;
 
       const loadLocalStorageData = () => {
         const savedChats = localStorage.getItem("savedChats");
@@ -618,33 +617,25 @@
       const generateAPIResponse = async (incomingMessageDiv) => {
         const textElement = incomingMessageDiv.querySelector(".text"); // Get text element
 
-        // Send a POST request to the API with the user's message
+        // Send a POST request to the secure API endpoint
         try {
           const response = await fetch(API_URL, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-              contents: [
-                {
-                  role: "user",
-                  parts: [{ text: userMessage }],
-                },
-              ],
+              message: userMessage
             }),
           });
 
           const data = await response.json();
-          if (!response.ok) throw new Error(data.error.message);
+          if (!response.ok) throw new Error(data.error || 'Request failed');
 
-          // Get the API response text and remove asterisks from it
-          const apiResponse = data?.candidates[0].content.parts[0].text.replace(
-            /\*\*(.*?)\*\*/g,
-            "$1"
-          );
+          // Get the API response text
+          const apiResponse = data.response;
           showTypingEffect(apiResponse, textElement, incomingMessageDiv);
         } catch (error) {
           isResponseGenerating = false;
-          textElement.innerText = error.message;
+          textElement.innerText = error.message || 'Something went wrong. Please try again.';
           textElement.classList.add("error");
         } finally {
           incomingMessageDiv.classList.remove("loading");

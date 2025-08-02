@@ -24,19 +24,24 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/kozen-ai-chatbot.git"
+    "url": "https://github.com/YashSaxena070/kozen-ai-chatbot.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/kozen-ai-chatbot/issues"
+    "url": "https://github.com/YashSaxena070/kozen-ai-chatbot/issues"
   },
-  "homepage": "https://github.com/yourusername/kozen-ai-chatbot#readme",
+  "homepage": "https://github.com/YashSaxena070/kozen-ai-chatbot#readme",
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
     "ejs": "^3.1.10",
     "express": "^5.1.0",
+    "express-rate-limit": "^7.1.5",
     "express-session": "^1.18.2",
-    "mongoose": "^8.16.4"
+    "helmet": "^7.1.0",
+    "mongoose": "^8.16.4",
+    "validator": "^13.11.0"
   },
   "devDependencies": {
     "nodemon": "^3.0.0"

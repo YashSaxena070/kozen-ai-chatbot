@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KOzen - Error</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: radial-gradient(circle at top left, #1f1f1f, #000);
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .error-container {
+            text-align: center;
+            padding: 2rem;
+        }
+        .error-code {
+            font-size: 6rem;
+            font-weight: bold;
+            color: #00c6ff;
+            margin: 0;
+        }
+        .error-message {
+            font-size: 1.5rem;
+            margin: 1rem 0;
+            color: #ccc;
+        }
+        .back-link {
+            color: #00c6ff;
+            text-decoration: none;
+            font-size: 1.1rem;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <h1 class="error-code">Oops!</h1>
+        <p class="error-message"><%= message %></p>
+        <a href="/" class="back-link">← Back to Home</a>
+    </div>
+</body>
+</html> 
