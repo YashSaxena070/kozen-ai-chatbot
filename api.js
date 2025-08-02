@@ -48,11 +48,11 @@ router.post('/chat', requireApiAuth, apiLimiter, validateChatInput, async (req, 
     console.log('🔍 Chat API called by user:', req.session.user);
     const { message } = req.body;
     console.log('🔍 Message received:', message);
-    const API_KEY = process.env.GEMINI_API_KEY;
+    const API_KEY = process.env.GEMINI_API_KEY || 'AIzaSyBK2VDH3TRBQFDTVO8gWKaznKjvAq3-Cyg'; // Temporary fallback for testing
     
     if (!API_KEY) {
       console.error('❌ Gemini API key not configured');
-      return res.status(500).json({ error: 'AI service not available' });
+      return res.status(500).json({ error: 'AI service not available. Please set GEMINI_API_KEY in environment variables.' });
     }
 
     const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`;

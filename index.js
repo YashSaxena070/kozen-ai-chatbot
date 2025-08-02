@@ -66,18 +66,21 @@ app.use(session({
 
 // Security: Input validation middleware
 const validateInput = (req, res, next) => {
-  const { username, password } = req.body;
-  
-  if (username && !validator.isLength(username, { min: 3, max: 30 })) {
-    return res.status(400).json({ error: 'Username must be between 3 and 30 characters' });
+  // Only validate if there's a body with username/password (for login/signup)
+  if (req.body && (req.body.username || req.body.password)) {
+    const { username, password } = req.body;
+    
+    if (username && !validator.isLength(username, { min: 3, max: 30 })) {
+      return res.status(400).json({ error: 'Username must be between 3 and 30 characters' });
+    }
+    
+    if (password && !validator.isLength(password, { min: 6 })) {
+      return res.status(400).json({ error: 'Password must be at least 6 characters' });
+    }
+    
+    // Sanitize inputs
+    if (username) req.body.username = validator.escape(username);
   }
-  
-  if (password && !validator.isLength(password, { min: 6 })) {
-    return res.status(400).json({ error: 'Password must be at least 6 characters' });
-  }
-  
-  // Sanitize inputs
-  if (username) req.body.username = validator.escape(username);
   
   next();
 };

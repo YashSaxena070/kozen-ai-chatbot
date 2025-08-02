@@ -553,6 +553,8 @@
     </div>
 
     <script>
+      console.log("🔍 Initializing chat functionality...");
+      
       const typingForm = document.querySelector(".typing-form");
       const chatList = document.querySelector(".chat-list");
       const suggestions = document.querySelectorAll(
@@ -560,6 +562,14 @@
       );
       const toggleThemeButton = document.querySelector("#toggle-theme-button");
       const deleteChatButton = document.querySelector("#delete-chat-button");
+      
+      console.log("🔍 Elements found:", {
+        typingForm: !!typingForm,
+        chatList: !!chatList,
+        suggestions: suggestions.length,
+        toggleThemeButton: !!toggleThemeButton,
+        deleteChatButton: !!deleteChatButton
+      });
 
       let userMessage = null;
       let isResponseGenerating = false;
@@ -684,10 +694,16 @@
 
       // Handle sending outgoing chat messages
       const handleOutgoingChat = () => {
+        console.log("🔍 handleOutgoingChat called");
         userMessage =
           typingForm.querySelector(".typing-input").value.trim() || userMessage;
-        if (!userMessage || isResponseGenerating) return; //Exit if there's no message
+        console.log("🔍 User message:", userMessage);
+        if (!userMessage || isResponseGenerating) {
+          console.log("❌ No message or already generating");
+          return; //Exit if there's no message
+        }
 
+        console.log("✅ Starting chat generation");
         isResponseGenerating = true;
 
         const html = `<div class="message-content">
@@ -708,6 +724,7 @@
       //Set userMessage and handle outgoing chat when a suggestion is clicked
       suggestions.forEach((suggestion) => {
         suggestion.addEventListener("click", () => {
+          console.log("🔍 Suggestion clicked:", suggestion.querySelector(".text").innerText);
           userMessage = suggestion.querySelector(".text").innerText;
           handleOutgoingChat();
         });
@@ -715,6 +732,7 @@
 
       // Toggle between light and dark themes
       toggleThemeButton.addEventListener("click", () => {
+        console.log("🔍 Theme toggle clicked");
         const isLightMode = document.body.classList.toggle("light_mode");
         localStorage.setItem(
           "themeColor",
@@ -724,6 +742,7 @@
       });
 
       deleteChatButton.addEventListener("click", () => {
+        console.log("🔍 Delete chat clicked");
         if (confirm("Are you sure you want to delete all the messages?")) {
           localStorage.removeItem("savedChats");
           loadLocalStorageData();
@@ -732,6 +751,7 @@
 
       //Prevent default form submission and handle outgoing chat
       typingForm.addEventListener("submit", (e) => {
+        console.log("🔍 Form submitted");
         e.preventDefault();
 
         handleOutgoingChat();
