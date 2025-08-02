@@ -1,0 +1,47 @@
+{
+  "name": "kozen-ai-chatbot",
+  "version": "1.0.0",
+  "description": "A modern, responsive AI chatbot web application built with Node.js, Express, and MongoDB. Features a beautiful dark/light theme interface with real-time chat capabilities powered by Google's Gemini AI.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ai",
+    "chatbot",
+    "gemini",
+    "nodejs",
+    "express",
+    "mongodb",
+    "ejs",
+    "real-time",
+    "dark-theme",
+    "responsive"
+  ],
+  "author": "Your Name <your-email@example.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/kozen-ai-chatbot.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/kozen-ai-chatbot/issues"
+  },
+  "homepage": "https://github.com/yourusername/kozen-ai-chatbot#readme",
+  "dependencies": {
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "express-session": "^1.18.2",
+    "mongoose": "^8.16.4"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

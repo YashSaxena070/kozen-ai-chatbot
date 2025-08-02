@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KOzen - Login</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Orbitron:wght@600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg-color: #0f0f0f;
+        --card-glass: rgba(255, 255, 255, 0.05);
+        --input-bg: rgba(255, 255, 255, 0.1);
+        --text-color: #ffffff;
+        --primary-color: #00c6ff;
+        --primary-dark: #0077b6;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Inter", sans-serif;
+      }
+
+      body {
+        background: radial-gradient(circle at top left, #1f1f1f, #000);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        overflow: hidden;
+        color: var(--text-color);
+      }
+
+      .signup-container {
+        background: var(--card-glass);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        padding: 2.5rem 2rem;
+        border-radius: 1.5rem;
+        box-shadow: 0 0 25px rgba(0, 255, 255, 0.1);
+        width: 100%;
+        max-width: 420px;
+        animation: slideIn 0.8s ease forwards;
+        opacity: 0;
+      }
+
+      @keyframes slideIn {
+        from {
+          transform: translateY(50px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      .background-text {
+        position: absolute;
+        font-size: 12rem;
+        color: rgba(255, 255, 255, 0.03);
+        font-family: "Orbitron", sans-serif;
+        z-index: 0;
+        pointer-events: none;
+        user-select: none;
+        animation: fadeGlow 6s ease-in-out infinite alternate;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        white-space: nowrap;
+      }
+
+      @keyframes fadeGlow {
+        0% {
+          text-shadow: 0 0 10px rgba(0, 198, 255, 0.1);
+        }
+        100% {
+          text-shadow: 0 0 30px rgba(0, 198, 255, 0.3);
+        }
+      }
+
+      .signup-container {
+        position: relative;
+        z-index: 2; /* Ensure it's above background text */
+      }
+
+      h1 {
+        text-align: center;
+        margin-bottom: 2rem;
+        font-size: 2.2rem;
+        font-family: "Orbitron", sans-serif;
+        background: linear-gradient(90deg, #00c6ff, #0072ff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: pulse 2s infinite ease-in-out;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          letter-spacing: 0px;
+          text-shadow: 0 0 10px #00c6ff;
+        }
+        50% {
+          letter-spacing: 1px;
+          text-shadow: 0 0 20px #0077b6;
+        }
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+
+      .input-group {
+        position: relative;
+      }
+
+      .input-group input {
+        width: 100%;
+        padding: 1.1rem 0.8rem 0.5rem;
+        border: none;
+        border-radius: 0.6rem;
+        background: var(--input-bg);
+        color: var(--text-color);
+        font-size: 1rem;
+        transition: all 0.3s ease;
+      }
+
+      .input-group label {
+        position: absolute;
+        left: 0.8rem;
+        top: 1.1rem;
+        color: #aaa;
+        font-size: 0.95rem;
+        pointer-events: none;
+        transition: 0.2s ease;
+        background: transparent;
+      }
+
+      .input-group input:focus,
+      .input-group input:not(:placeholder-shown) {
+        background: rgba(255, 255, 255, 0.15);
+      }
+
+      .input-group input:focus + label,
+      .input-group input:not(:placeholder-shown) + label {
+        top: 0.3rem;
+        left: 0.7rem;
+        font-size: 0.75rem;
+        color: var(--primary-color);
+        background: transparent;
+      }
+
+      button {
+        padding: 1rem;
+        background: linear-gradient(
+          90deg,
+          var(--primary-color),
+          var(--primary-dark)
+        );
+        border: none;
+        border-radius: 0.6rem;
+        color: white;
+        font-weight: bold;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0, 198, 255, 0.4);
+      }
+
+      .footer-note {
+        text-align: center;
+        margin-top: 1.5rem;
+        font-size: 0.75rem;
+        color: #bbb;
+        animation: fadeIn 1s ease-in-out;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Big KOzen background text -->
+    <div class="background-text">KOzen</div>
+
+    <div class="signup-container">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:0.5rem;">
+        <img src="/Images/logo.jpeg" alt="User Avatar" style="width:72px;height:72px;border-radius:50%;box-shadow:0 2px 12px rgba(0,198,255,0.12);margin-bottom:0.5rem;object-fit:cover;" />
+        <h1 style="margin-bottom:0.2rem;">Join us!</h1>
+        <div style="color:#00c6ff;font-size:1.1rem;margin-bottom:1.2rem;">Create your KOzen account</div>
+      </div>
+      <form action="/user/signup" method="post">
+        <div class="input-group">
+          <input
+            type="text"
+            id="username"
+            name="username"
+            required
+            placeholder=" "
+          />
+          <label for="username">Username or Email</label>
+        </div>
+        <div class="input-group">
+          <input
+            type="password"
+            id="password"
+            name="password"
+            required
+            placeholder=" "
+          />
+          <label for="password">Password</label>
+          <span id="togglePassword" style="position:absolute;right:1rem;top:1.1rem;cursor:pointer;color:#00c6ff;font-size:1.1rem;user-select:none;">👁️</span>
+        </div>
+        <button type="submit">Create Account →</button>
+      </form>
+      <div class="footer-note">Don't share your password with anyone.</div>
+      <div style="text-align:center;margin-top:1.2rem;font-size:0.98rem;">
+        Already have an account? <a href="/user/login" style="color:#00c6ff;text-decoration:underline;">Sign in</a>
+      </div>
+    </div>
+
+    <script>
+      // Show/hide password toggle
+      const togglePassword = document.getElementById('togglePassword');
+      const passwordInput = document.getElementById('password');
+      if(togglePassword && passwordInput) {
+        togglePassword.addEventListener('click', function() {
+          const type = passwordInput.type === 'password' ? 'text' : 'password';
+          passwordInput.type = type;
+          this.textContent = type === 'password' ? '👁️' : '🙈';
+        });
+      }
+    </script>
+    <script src="index.js"></script>
+  </body>
+</html>
