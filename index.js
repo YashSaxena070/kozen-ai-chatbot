@@ -137,7 +137,7 @@ app.get("/user/signup", (req, res) => {
 });
 
 // Apply input validation to user routes
-app.use("/user", validateInput, userRoute);
+app.use("/user", userRoute);
 
 // API routes
 app.use("/api", apiRoute);

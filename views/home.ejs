@@ -553,8 +553,6 @@
     </div>
 
     <script>
-      console.log("🔍 Initializing chat functionality...");
-      
       const typingForm = document.querySelector(".typing-form");
       const chatList = document.querySelector(".chat-list");
       const suggestions = document.querySelectorAll(
@@ -562,20 +560,13 @@
       );
       const toggleThemeButton = document.querySelector("#toggle-theme-button");
       const deleteChatButton = document.querySelector("#delete-chat-button");
-      
-      console.log("🔍 Elements found:", {
-        typingForm: !!typingForm,
-        chatList: !!chatList,
-        suggestions: suggestions.length,
-        toggleThemeButton: !!toggleThemeButton,
-        deleteChatButton: !!deleteChatButton
-      });
 
       let userMessage = null;
       let isResponseGenerating = false;
 
-      //API configuration - Now using secure backend endpoint
-      const API_URL = `/api/chat`;
+      //API configuration
+      const API_KEY = `AIzaSyBK2VDH3TRBQFDTVO8gWKaznKjvAq3-Cyg`;
+      const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`;
 
       const loadLocalStorageData = () => {
         const savedChats = localStorage.getItem("savedChats");
@@ -627,31 +618,33 @@
       const generateAPIResponse = async (incomingMessageDiv) => {
         const textElement = incomingMessageDiv.querySelector(".text"); // Get text element
 
-        // Send a POST request to the secure API endpoint
+        // Send a POST request to the API with the user's message
         try {
-          console.log('🔍 Sending chat request:', userMessage);
           const response = await fetch(API_URL, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            credentials: 'same-origin', // Include session cookies
             body: JSON.stringify({
-              message: userMessage
+              contents: [
+                {
+                  role: "user",
+                  parts: [{ text: userMessage }],
+                },
+              ],
             }),
           });
 
-          console.log('🔍 Response status:', response.status);
           const data = await response.json();
-          console.log('🔍 Response data:', data);
-          
-          if (!response.ok) throw new Error(data.error || 'Request failed');
+          if (!response.ok) throw new Error(data.error.message);
 
-          // Get the API response text
-          const apiResponse = data.response;
+          // Get the API response text and remove asterisks from it
+          const apiResponse = data?.candidates[0].content.parts[0].text.replace(
+            /\*\*(.*?)\*\*/g,
+            "$1"
+          );
           showTypingEffect(apiResponse, textElement, incomingMessageDiv);
         } catch (error) {
-          console.error('❌ Chat API error:', error);
           isResponseGenerating = false;
-          textElement.innerText = error.message || 'Something went wrong. Please try again.';
+          textElement.innerText = error.message;
           textElement.classList.add("error");
         } finally {
           incomingMessageDiv.classList.remove("loading");
@@ -694,16 +687,10 @@
 
       // Handle sending outgoing chat messages
       const handleOutgoingChat = () => {
-        console.log("🔍 handleOutgoingChat called");
         userMessage =
           typingForm.querySelector(".typing-input").value.trim() || userMessage;
-        console.log("🔍 User message:", userMessage);
-        if (!userMessage || isResponseGenerating) {
-          console.log("❌ No message or already generating");
-          return; //Exit if there's no message
-        }
+        if (!userMessage || isResponseGenerating) return; //Exit if there's no message
 
-        console.log("✅ Starting chat generation");
         isResponseGenerating = true;
 
         const html = `<div class="message-content">
@@ -724,7 +711,6 @@
       //Set userMessage and handle outgoing chat when a suggestion is clicked
       suggestions.forEach((suggestion) => {
         suggestion.addEventListener("click", () => {
-          console.log("🔍 Suggestion clicked:", suggestion.querySelector(".text").innerText);
           userMessage = suggestion.querySelector(".text").innerText;
           handleOutgoingChat();
         });
@@ -732,7 +718,6 @@
 
       // Toggle between light and dark themes
       toggleThemeButton.addEventListener("click", () => {
-        console.log("🔍 Theme toggle clicked");
         const isLightMode = document.body.classList.toggle("light_mode");
         localStorage.setItem(
           "themeColor",
@@ -742,7 +727,6 @@
       });
 
       deleteChatButton.addEventListener("click", () => {
-        console.log("🔍 Delete chat clicked");
         if (confirm("Are you sure you want to delete all the messages?")) {
           localStorage.removeItem("savedChats");
           loadLocalStorageData();
@@ -751,7 +735,6 @@
 
       //Prevent default form submission and handle outgoing chat
       typingForm.addEventListener("submit", (e) => {
-        console.log("🔍 Form submitted");
         e.preventDefault();
 
         handleOutgoingChat();
