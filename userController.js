@@ -56,9 +56,11 @@ async function handleUserSignup(req, res) {
 async function handleUserSignin(req, res) {
   try {
     const { username, password } = req.body;
+    console.log("🔍 Login attempt for username:", username);
 
     // Security: Input validation
     if (!username || !password) {
+      console.log("❌ Missing username or password");
       return res.render("login", {
         error: "Username and password are required"
       });
@@ -66,17 +68,37 @@ async function handleUserSignin(req, res) {
 
     // Security: Find user and verify password
     const user = await User.findOne({ username: validator.escape(username) });
+    console.log("🔍 User found:", user ? "Yes" : "No");
     
     if (!user) {
+      console.log("❌ User not found");
       return res.render("login", {
         error: "Invalid username or password"
       });
     }
 
-    // Security: Verify password hash
-    const isPasswordValid = await verifyPassword(password, user.password);
+    // Security: Check if password is hashed or plain text (for existing users)
+    let isPasswordValid = false;
+    
+    if (user.password.startsWith('$2b$') || user.password.startsWith('$2a$')) {
+      // Password is hashed, verify with bcrypt
+      isPasswordValid = await verifyPassword(password, user.password);
+      console.log("🔍 Password verification (hashed):", isPasswordValid);
+    } else {
+      // Password is plain text (for existing users), compare directly
+      isPasswordValid = (password === user.password);
+      console.log("🔍 Password verification (plain text):", isPasswordValid);
+      
+      // If login successful with plain text, hash the password for future
+      if (isPasswordValid) {
+        console.log("🔄 Updating plain text password to hashed");
+        const hashedPassword = await hashPassword(password);
+        await User.findByIdAndUpdate(user._id, { password: hashedPassword });
+      }
+    }
     
     if (!isPasswordValid) {
+      console.log("❌ Invalid password");
       return res.render("login", {
         error: "Invalid username or password"
       });
@@ -84,7 +106,9 @@ async function handleUserSignin(req, res) {
 
     // Security: Save username to session
     req.session.user = user.username;
-    console.log(`✅ User logged in: ${user.username}`);
+    console.log(`✅ User logged in successfully: ${user.username}`);
+    console.log("🔍 Session user set to:", req.session.user);
+    
     return res.redirect("/");
   } catch (error) {
     console.error("❌ Login error:", error);

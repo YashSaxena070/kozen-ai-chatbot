@@ -140,7 +140,13 @@ app.use("/user", validateInput, userRoute);
 app.use("/api", apiRoute);
 
 // Protected home route
-app.get("/", requireAuth, (req, res) => {
+app.get("/", (req, res) => {
+  console.log("🔍 Home route accessed, session user:", req.session.user);
+  if (!req.session.user) {
+    console.log("❌ No session user, redirecting to login");
+    return res.redirect('/user/login');
+  }
+  console.log("✅ Rendering home page for user:", req.session.user);
   res.render("home", { username: req.session.user });
 });
 
